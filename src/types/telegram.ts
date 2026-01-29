@@ -122,7 +122,7 @@ export interface PopupButton {
 
 declare global {
   interface Window {
-    Telegram: {
+    Telegram?: {
       WebApp: TelegramWebApp;
     };
   }

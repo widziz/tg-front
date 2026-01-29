@@ -1,73 +1,124 @@
-// API URL - замените на ваш backend URL после деплоя
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// API клиент для бэкенда
+const API_URL = import.meta.env.VITE_API_URL || '';
 
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  emoji: string;
+interface ApiOptions {
+  method?: 'GET' | 'POST';
+  body?: Record<string, unknown>;
+  initData?: string;
 }
 
-interface CreateInvoiceResponse {
-  success: boolean;
-  invoiceLink?: string;
-  error?: string;
-}
+async function apiCall<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
+  const { method = 'GET', body, initData } = options;
+  
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  
+  if (initData) {
+    headers['X-Telegram-Init-Data'] = initData;
+  }
 
-interface ProductsResponse {
-  success: boolean;
-  products: Product[];
-}
-
-// Создание инвойса для оплаты в Stars
-export async function createInvoice(
-  initData: string,
-  productId: string,
-  title: string,
-  description: string,
-  price: number
-): Promise<CreateInvoiceResponse> {
-  const response = await fetch(`${API_URL}/api/create-invoice`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Telegram-Init-Data': initData,
-    },
-    body: JSON.stringify({
-      productId,
-      title,
-      description,
-      price,
-    }),
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to create invoice');
+    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(error.error || error.message || 'Request failed');
   }
 
   return response.json();
 }
 
-// Получение списка продуктов
-export async function getProducts(): Promise<Product[]> {
-  const response = await fetch(`${API_URL}/api/products`);
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch products');
-  }
-
-  const data: ProductsResponse = await response.json();
-  return data.products;
+// Типы
+export interface User {
+  id: number;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  photo_url?: string;
+  balance: number;
+  has_boost: boolean;
+  total_spins: number;
+  total_won: number;
 }
 
-// Проверка статуса сервера
-export async function checkHealth(): Promise<boolean> {
-  try {
-    const response = await fetch(`${API_URL}/api/health`);
-    return response.ok;
-  } catch {
-    return false;
-  }
+export interface AuthResponse {
+  success: boolean;
+  demo?: boolean;
+  user: User;
 }
+
+export interface Prize {
+  id: number;
+  image: string;
+  name: string;
+  value: string;
+  multiplier: number;
+  isBoost?: boolean;
+}
+
+export interface SpinResponse {
+  success: boolean;
+  targetSlot: number;
+  prize: Prize;
+  bet: number;
+  winAmount: number;
+  boostUsed: boolean;
+  newBalance: number;
+  hasBoost: boolean;
+}
+
+export interface BalanceResponse {
+  success: boolean;
+  balance: number;
+  hasBoost: boolean;
+}
+
+export interface DepositResponse {
+  success: boolean;
+  invoiceLink: string;
+  amount: number;
+  bonus: number;
+  total: number;
+}
+
+export interface HistoryItem {
+  id: number;
+  bet: number;
+  prize: Prize;
+  winAmount: number;
+  boostUsed: boolean;
+  createdAt: string;
+}
+
+// API функции
+export const api = {
+  // Авторизация
+  auth: (initData: string): Promise<AuthResponse> => 
+    apiCall('/api/auth', { method: 'POST', body: { initData } }),
+
+  // Баланс
+  getBalance: (initData: string): Promise<BalanceResponse> => 
+    apiCall('/api/balance', { initData }),
+
+  // Спин рулетки
+  spin: (initData: string, bet: number): Promise<SpinResponse> => 
+    apiCall('/api/spin', { method: 'POST', body: { bet }, initData }),
+
+  // История игр
+  getHistory: (initData: string, limit = 20): Promise<{ success: boolean; history: HistoryItem[] }> => 
+    apiCall(`/api/history?limit=${limit}`, { initData }),
+
+  // Создать инвойс для депозита
+  createDeposit: (initData: string, amount: number): Promise<DepositResponse> => 
+    apiCall('/api/deposit', { method: 'POST', body: { amount }, initData }),
+
+  // Health check
+  health: (): Promise<{ status: string; botConfigured: boolean }> => 
+    apiCall('/api/health'),
+};
+
+export default api;
