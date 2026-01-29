@@ -1,0 +1,279 @@
+.app {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border-radius: 24px;
+  padding: 30px;
+  max-width: 340px;
+  width: 90%;
+  border: 1px solid #444;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Win Modal */
+.win-modal .modal-content {
+  text-align: center;
+  background: linear-gradient(145deg, #1a3a1a, #0d1f0d);
+  border-color: #4ade80;
+}
+
+.win-amount {
+  font-size: 48px;
+  font-weight: 800;
+  color: #4ade80;
+  margin: 20px 0;
+  text-shadow: 0 0 30px rgba(74, 222, 128, 0.5);
+}
+
+.win-prize {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.win-multiplier {
+  font-size: 18px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+/* Deposit Modal */
+.deposit-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.deposit-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #444;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deposit-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #667eea;
+  transform: translateX(5px);
+}
+
+.deposit-amount {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.deposit-bonus {
+  font-size: 14px;
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.deposit-total {
+  font-size: 14px;
+  color: #888;
+}
+
+/* Buttons */
+.btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin-top: 10px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Balance button in TopBar */
+.balance-container {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.balance-container:hover {
+  transform: scale(1.05);
+}
+
+.balance-container:active {
+  transform: scale(0.98);
+}
+
+/* Loading */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #232323;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #444;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  margin-top: 20px;
+  color: #888;
+  font-size: 16px;
+}
+
+/* Error */
+.error-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #232323;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.error-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 30px;
+}
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: 0;
+  animation: confetti-fall 3s ease-out forwards;
+  z-index: 1001;
+}
+
+/* Boost indicator */
+.boost-indicator {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ff9033, #ff5722);
+  padding: 8px 20px;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(255, 144, 51, 0.4);
+  z-index: 5;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+/* Insufficient balance warning */
+.insufficient-balance {
+  color: #ef4444;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 5px;
+}

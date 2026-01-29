@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="40" fill="#FF9800"/>
+  <circle cx="50" cy="50" r="35" fill="#FFB74D"/>
+  <path d="M30 40 L45 55 L30 70" stroke="#FF5722" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M55 55 L70 55" stroke="#FF5722" stroke-width="6" stroke-linecap="round"/>
+  <text x="50" y="85" text-anchor="middle" font-size="10" font-weight="bold" fill="#E65100">BOOST</text>
+</svg>
