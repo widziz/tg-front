@@ -10,7 +10,7 @@
   max-width: 420px;
   padding: 0 15px;
   background: transparent;
-  color: #fff;
+  color: var(--tg-text);
   z-index: 10;
   pointer-events: none;
   box-sizing: border-box;
@@ -19,63 +19,65 @@
 .user-info {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   pointer-events: auto;
   flex-shrink: 0;
 }
 
 .avatar {
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   object-fit: cover;
-  border: 0;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--tg-accent);
+  box-shadow: 0 0 12px rgba(42, 171, 238, 0.3);
   flex-shrink: 0;
-  background: #444;
+  background: var(--tg-bg-secondary);
 }
 
 .avatar-placeholder {
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--tg-accent), var(--tg-accent-dark));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: white;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 12px rgba(42, 171, 238, 0.3);
 }
 
 .username {
-  font-size: 23px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.7px;
-  margin-bottom: 4px;
+  letter-spacing: 0.3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
+  max-width: 100px;
+  color: var(--tg-text);
 }
 
 .balance-container {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 32px;
-  background: rgba(65, 63, 64, 0.4);
+  height: 36px;
+  background: var(--tg-bg-secondary);
   padding: 6px 14px;
-  border-radius: 26px;
+  border-radius: 20px;
   pointer-events: auto;
   flex-shrink: 0;
   cursor: pointer;
   transition: all 0.2s ease;
+  border: 1px solid var(--tg-border);
 }
 
 .balance-container:hover {
-  background: rgba(65, 63, 64, 0.6);
+  background: rgba(42, 171, 238, 0.15);
+  border-color: var(--tg-accent);
   transform: scale(1.02);
 }
 
@@ -84,23 +86,23 @@
 }
 
 .balance-icon {
-  width: 30px;
-  height: 30px;
-  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.1));
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.3));
 }
 
 .balance-amount {
-  font-size: 23px;
+  font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: var(--tg-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .balance-plus {
-  font-size: 18px;
-  color: #4ade80;
+  font-size: 16px;
+  color: var(--tg-accent);
   font-weight: 700;
-  margin-left: 4px;
+  margin-left: 2px;
 }

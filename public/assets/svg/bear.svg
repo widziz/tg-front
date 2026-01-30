@@ -1,1 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#8B4513" /><text x="50" y="55" font-size="40" text-anchor="middle">🧸</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="25" cy="25" r="15" fill="#8B4513"/>
+  <circle cx="75" cy="25" r="15" fill="#8B4513"/>
+  <circle cx="50" cy="55" r="35" fill="#A0522D"/>
+  <circle cx="50" cy="50" r="30" fill="#D2691E"/>
+  <circle cx="38" cy="45" r="5" fill="#000"/>
+  <circle cx="62" cy="45" r="5" fill="#000"/>
+  <ellipse cx="50" cy="60" rx="8" ry="6" fill="#000"/>
+  <path d="M42 70 Q50 78 58 70" stroke="#000" stroke-width="2" fill="none"/>
+</svg>

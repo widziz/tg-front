@@ -42,12 +42,12 @@ function App() {
       tg.ready();
       tg.expand();
       
-      // Настройка темы
+      // Настройка темы Telegram
       if (tg.setHeaderColor) {
-        tg.setHeaderColor('#232323');
+        tg.setHeaderColor('#17212b');
       }
       if (tg.setBackgroundColor) {
-        tg.setBackgroundColor('#232323');
+        tg.setBackgroundColor('#17212b');
       }
     }
 
@@ -64,8 +64,8 @@ function App() {
       if (data?.user) {
         setUser({
           ...data.user,
-          balance: data.balance || 0,
-          has_boost: data.has_boost || false,
+          balance: data.balance || data.user.balance || 0,
+          has_boost: data.has_boost || data.user.has_boost || false,
         });
       } else {
         // Демо режим
@@ -113,16 +113,16 @@ function App() {
       const result = await spin(betAmount);
       
       // Устанавливаем целевой слот и запускаем анимацию
-      setTargetSlot(result.slotIndex);
+      setTargetSlot(result.targetSlot);
       setShouldSpin(true);
       
       // Сохраняем результат для показа после анимации
       setWinResult({
-        prize: wheelConfig.prizes[result.slotIndex],
+        prize: wheelConfig.prizes[result.targetSlot],
         winAmount: result.winAmount,
         newBalance: result.newBalance,
         hasBoost: result.hasBoost,
-        isBoost: result.isBoost,
+        isBoost: result.prize?.isBoost || wheelConfig.prizes[result.targetSlot]?.type === 'boost',
       });
       
     } catch (err) {
@@ -135,7 +135,7 @@ function App() {
       }));
       
       // Демо спин если нет сервера
-      if (err.message?.includes("fetch")) {
+      if (err.message?.includes("fetch") || err.message?.includes("Failed")) {
         demoSpin(betAmount);
       } else {
         setIsSpinning(false);

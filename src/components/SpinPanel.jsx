@@ -48,7 +48,7 @@ export const SpinPanel = ({
         ) : (
           <>
             КРУТИТЬ
-            {hasBoost && <span style={{ color: "#ff9033" }}> x2</span>}
+            {hasBoost && <span style={{ color: "var(--tg-warning)" }}> x2</span>}
             <span className="spin-cost">
               {selectedBet}
               <svg className="star-icon" viewBox="0 0 24 24" fill="none">

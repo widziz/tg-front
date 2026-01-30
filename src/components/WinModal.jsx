@@ -4,8 +4,8 @@ export const WinModal = ({ prize, winAmount, onClose }) => {
   const [confetti, setConfetti] = useState([]);
 
   useEffect(() => {
-    // Создаём конфетти
-    const colors = ["#667eea", "#764ba2", "#4ade80", "#ffd700", "#ff6b6b"];
+    // Создаём конфетти с Telegram цветами
+    const colors = ["#2AABEE", "#229ED9", "#4ade80", "#ffd700", "#ff6b6b"];
     const newConfetti = [];
     
     for (let i = 0; i < 50; i++) {
@@ -50,8 +50,8 @@ export const WinModal = ({ prize, winAmount, onClose }) => {
 
         {isBoost ? (
           <>
-            <div className="modal-title">BOOST АКТИВИРОВАН!</div>
-            <div className="win-multiplier" style={{ color: "#ff9033" }}>
+            <div className="modal-title">⚡ BOOST АКТИВИРОВАН!</div>
+            <div className="win-multiplier" style={{ color: "var(--tg-warning)" }}>
               Следующий выигрыш x2
             </div>
           </>
