@@ -112,17 +112,20 @@ function App() {
       // Запрос к серверу
       const result = await spin(betAmount);
       
+      console.log("📦 Результат spin:", result);
+      
       // Устанавливаем целевой слот и запускаем анимацию
-      setTargetSlot(result.targetSlot);
+      const slotIndex = result.slotIndex;
+      setTargetSlot(slotIndex);
       setShouldSpin(true);
       
       // Сохраняем результат для показа после анимации
       setWinResult({
-        prize: wheelConfig.prizes[result.targetSlot],
+        prize: wheelConfig.prizes[slotIndex] || result.prize,
         winAmount: result.winAmount,
         newBalance: result.newBalance,
         hasBoost: result.hasBoost,
-        isBoost: result.prize?.isBoost || wheelConfig.prizes[result.targetSlot]?.type === 'boost',
+        isBoost: result.isBoost || wheelConfig.prizes[slotIndex]?.type === 'boost',
       });
       
     } catch (err) {
