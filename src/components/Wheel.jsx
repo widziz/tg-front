@@ -52,16 +52,16 @@ export const Wheel = ({ onSpinStart, onSpinEnd, targetSlot, shouldSpin }) => {
         antiRepeat: false,
       },
       onGenerate: (result) => {
-        console.log('🎲 Сгенерирован результат:', {
-          слот: result.targetSlot,
-          приз: `${result.prize?.image || ''} ${result.prize?.value || 'неизвестно'}`,
+        console.log('🎲 Generated result:', {
+          slot: result.targetSlot,
+          prize: `${result.prize?.image || ''} ${result.prize?.value || 'unknown'}`,
         });
       },
       onUpdate: (newRotation) => {
         setRotation(newRotation);
       },
       onComplete: (finalRotation, winningIndex, prize) => {
-        console.log('🏆 Выигрышный приз:', `${prize?.value || 'Неизвестно'}`);
+        console.log('🏆 Winning prize:', `${prize?.value || 'Unknown'}`);
         setRotation(finalRotation);
         if (onSpinEnd) onSpinEnd(winningIndex, prize);
       }
@@ -71,18 +71,17 @@ export const Wheel = ({ onSpinStart, onSpinEnd, targetSlot, shouldSpin }) => {
   };
 
   return (
-    <div className="wheel-container">
+    <div className="relative w-full h-full">
+      {/* Wheel container */}
       <div className="roulette-container">
         <svg
           ref={svgRef}
           viewBox="0 0 800 800"
+          className="w-full h-full"
           style={{ 
-            width: '100%', 
-            height: '100%',
             transform: `rotate(${rotation}deg)`,
             transformOrigin: 'center',
             transition: 'none',
-            overflow: 'visible'
           }}
         >
           <defs>
@@ -94,11 +93,8 @@ export const Wheel = ({ onSpinStart, onSpinEnd, targetSlot, shouldSpin }) => {
         </svg>
       </div>
 
-      <div className="pointer" style={{ 
-        top: '112px', 
-        bottom: 'auto',
-        transform: 'translateX(-50%)'
-      }}></div>
+      {/* Pointer */}
+      <div className="wheel-pointer" />
     </div>
   );
 };
