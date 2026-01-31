@@ -16,7 +16,7 @@ export const createWheel = (svgRef) => {
   const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
   svg.appendChild(defs);
 
-  // Create donut frame
+  // Create donut frame with new dark theme
   const donutFrame = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   const donutOuterRadius = outerRadius + 10;
   const donutInnerRadius = innerRadius - 10;
@@ -32,9 +32,9 @@ export const createWheel = (svgRef) => {
   `;
   
   donutFrame.setAttribute('d', donutPath);
-  donutFrame.setAttribute('fill', '#222222');
+  donutFrame.setAttribute('fill', '#0a0a0b');
   donutFrame.setAttribute('fill-rule', 'evenodd');
-  donutFrame.setAttribute('stroke', '#444');
+  donutFrame.setAttribute('stroke', '#1a1a1d');
   donutFrame.setAttribute('stroke-width', '2');
   svg.appendChild(donutFrame);
 
@@ -48,7 +48,7 @@ export const createWheel = (svgRef) => {
 
   const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
   blur.setAttribute('in', 'SourceGraphic');
-  blur.setAttribute('stdDeviation', '25');
+  blur.setAttribute('stdDeviation', '20');
 
   filter.appendChild(blur);
   defs.appendChild(filter);
@@ -60,13 +60,23 @@ export const createWheel = (svgRef) => {
     slotGroup.setAttribute('data-slot', i.toString());
 
     const prize = prizes[i];
-    let strokeColor = '#aaa';
-    if (prize.value === 'Буст') strokeColor = '#ff9033';
-    else if (parseInt(prize.value) >= 150) strokeColor = '#f0d333ff';
-    else if (parseInt(prize.value) >= 75) strokeColor = '#ff4a50';
-    else if (parseInt(prize.value) >= 40) strokeColor = '#c32dffff';
-    else if (parseInt(prize.value) >= 20) strokeColor = '#53bbf7ff';
-    else if (parseInt(prize.value) >= 10) strokeColor = '#575757';
+    
+    // New color scheme based on rarity/multiplier
+    let strokeColor = '#3f3f46'; // default gray
+    
+    if (prize.type === 'boost') {
+      strokeColor = '#F59E0B'; // gold for boost
+    } else if (prize.multiplier >= 10) {
+      strokeColor = '#F59E0B'; // gold for legendary
+    } else if (prize.multiplier >= 4) {
+      strokeColor = '#8B5CF6'; // purple for epic
+    } else if (prize.multiplier >= 2) {
+      strokeColor = '#2AABEE'; // blue for rare  
+    } else if (prize.multiplier >= 1) {
+      strokeColor = '#52525b'; // dark gray for common
+    } else {
+      strokeColor = '#3f3f46'; // very dark for lowest
+    }
 
     const angleStep = (2 * Math.PI) / slots;
     const centerAngle = i * angleStep - Math.PI / 2;
@@ -84,7 +94,7 @@ export const createWheel = (svgRef) => {
       gapWidth,
       cornerRadius
     ));
-    path.setAttribute('fill', '#222222');
+    path.setAttribute('fill', '#18181b');
     path.setAttribute('stroke', 'none');
     slotGroup.appendChild(path);
 
@@ -109,12 +119,12 @@ export const createWheel = (svgRef) => {
     const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
     stop1.setAttribute('offset', '0%');
     stop1.setAttribute('stop-color', strokeColor);
-    stop1.setAttribute('stop-opacity', '1');
+    stop1.setAttribute('stop-opacity', '0.8');
 
     const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-    stop2.setAttribute('offset', '70%');
+    stop2.setAttribute('offset', '60%');
     stop2.setAttribute('stop-color', strokeColor);
-    stop2.setAttribute('stop-opacity', '0.3');
+    stop2.setAttribute('stop-opacity', '0.2');
 
     const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
     stop3.setAttribute('offset', '100%');
@@ -130,17 +140,17 @@ export const createWheel = (svgRef) => {
     const maskedGlow = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     maskedGlow.setAttribute('mask', `url(#${maskId})`);
     
-    const glowDistance = innerRadius + slotHeight * 0.8;
+    const glowDistance = innerRadius + slotHeight * 0.75;
     const glowCenterX = centerX + (glowDistance * Math.cos(centerAngle));
     const glowCenterY = centerY + (glowDistance * Math.sin(centerAngle));
 
     const glowCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     glowCircle.setAttribute('cx', glowCenterX);
     glowCircle.setAttribute('cy', glowCenterY);
-    glowCircle.setAttribute('r', slotHeight * 0.6);
+    glowCircle.setAttribute('r', slotHeight * 0.55);
     glowCircle.setAttribute('fill', `url(#${gradientId})`);
     glowCircle.setAttribute('filter', 'url(#slot-glow)');
-    glowCircle.setAttribute('opacity', '0.5');
+    glowCircle.setAttribute('opacity', '0.6');
 
     maskedGlow.appendChild(glowCircle);
     slotGroup.appendChild(maskedGlow);
@@ -150,15 +160,16 @@ export const createWheel = (svgRef) => {
     strokeOverlay.setAttribute('d', path.getAttribute('d'));
     strokeOverlay.setAttribute('fill', 'none');
     strokeOverlay.setAttribute('stroke', strokeColor);
-    strokeOverlay.setAttribute('stroke-width', '2');
+    strokeOverlay.setAttribute('stroke-width', '1.5');
+    strokeOverlay.setAttribute('stroke-opacity', '0.6');
     strokeOverlay.setAttribute('pointer-events', 'none');
     slotGroup.appendChild(strokeOverlay);
 
-    // Bottom rectangle
-    const rectWidth = slotWidth / 2;
-    const rectHeight = slotHeight / 28;
-    const centerDistance = innerRadius + slotHeight - rectHeight * 1.5;
-    const offset = 5;
+    // Bottom rectangle indicator
+    const rectWidth = slotWidth / 2.2;
+    const rectHeight = slotHeight / 30;
+    const centerDistance = innerRadius + slotHeight - rectHeight * 1.8;
+    const offset = 4;
     const rectCenterX = centerX + (centerDistance * Math.cos(centerAngle)) + offset * Math.cos(centerAngle);
     const rectCenterY = centerY + (centerDistance * Math.sin(centerAngle)) + offset * Math.sin(centerAngle);
 
@@ -167,15 +178,16 @@ export const createWheel = (svgRef) => {
     bottomRect.setAttribute('y', rectCenterY - rectHeight / 2);
     bottomRect.setAttribute('width', rectWidth);
     bottomRect.setAttribute('height', rectHeight);
-    bottomRect.setAttribute('rx', '4');
-    bottomRect.setAttribute('ry', '4');
+    bottomRect.setAttribute('rx', '3');
+    bottomRect.setAttribute('ry', '3');
     bottomRect.setAttribute('fill', strokeColor);
+    bottomRect.setAttribute('opacity', '0.8');
 
     const angleDeg = (centerAngle * 180) / Math.PI + 90;
     bottomRect.setAttribute('transform', `rotate(${angleDeg} ${rectCenterX} ${rectCenterY})`);
     slotGroup.appendChild(bottomRect);
 
-    // Image and text
+    // Image and text positions
     const textRadius = (outerRadius + innerRadius) / 2;
     const imageX = centerX + (textRadius + 22) * Math.cos(centerAngle);
     const imageY = centerY + (textRadius + 22) * Math.sin(centerAngle);
@@ -187,7 +199,7 @@ export const createWheel = (svgRef) => {
     const imageGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     imageGroup.setAttribute('transform', `rotate(${textRotationAngle} ${imageX} ${imageY})`);
 
-    const imageSize = 95; 
+    const imageSize = 90; 
     const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     image.setAttribute('x', imageX - imageSize/2);
     image.setAttribute('y', imageY - imageSize/2);
@@ -205,6 +217,11 @@ export const createWheel = (svgRef) => {
     text.classList.add('slot-text');
     text.setAttribute('x', textX);
     text.setAttribute('y', textY);
+    text.setAttribute('fill', '#ffffff');
+    text.setAttribute('font-size', '16');
+    text.setAttribute('font-weight', '700');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'middle');
     text.textContent = prize.value;
     textGroup.appendChild(text);
 

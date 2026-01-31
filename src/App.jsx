@@ -5,18 +5,25 @@ import { DailyRewards } from "./components/DailyRewards";
 import { SpinButton } from "./components/SpinButton";
 import { BottomNav } from "./components/BottomNav";
 import { WinModal } from "./components/WinModal";
-import { authWithTelegram, spin, getBalance } from "./api";
+import { CasesPage } from "./pages/CasesPage";
+import { GamesPage } from "./pages/GamesPage";
+import { InventoryPage } from "./pages/InventoryPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { authWithTelegram, spin } from "./api";
 import { wheelConfig } from "./utils/wheel/config";
 
-// Demo user for testing outside Telegram
+// Demo user for testing
 const DEMO_USER = {
   id: 12345,
-  first_name: "Demo",
-  username: "demo_user",
+  first_name: "Player",
+  username: "player",
   photo_url: null,
-  credits: 1000,
-  stars: 100,
+  credits: 1250,
+  stars: 85,
   has_boost: false,
+  level: 7,
+  xp: 2450,
+  xpMax: 3000,
 };
 
 function App() {
@@ -48,10 +55,10 @@ function App() {
       tg.expand();
       
       if (tg.setHeaderColor) {
-        tg.setHeaderColor('#0d0d0f');
+        tg.setHeaderColor('#0a0a0b');
       }
       if (tg.setBackgroundColor) {
-        tg.setBackgroundColor('#0d0d0f');
+        tg.setBackgroundColor('#0a0a0b');
       }
     }
 
@@ -66,10 +73,10 @@ function App() {
       
       if (data?.user) {
         setUser({
+          ...DEMO_USER,
           ...data.user,
-          credits: data.user.balance || 1000,
-          stars: data.user.stars || 100,
-          has_boost: data.user.has_boost || false,
+          credits: data.user.balance || DEMO_USER.credits,
+          stars: data.user.stars || DEMO_USER.stars,
         });
       } else {
         setUser(DEMO_USER);
@@ -84,12 +91,12 @@ function App() {
 
   // Handle spin
   const handleSpin = useCallback(async () => {
-    if (isSpinning) return;
+    if (isSpinning || !canSpinFree) return;
     
     setIsSpinning(true);
 
     try {
-      const result = await spin(0); // Free spin
+      const result = await spin(0);
       
       setTargetSlot(result.slotIndex);
       setShouldSpin(true);
@@ -101,7 +108,6 @@ function App() {
         isBoost: result.isBoost,
       });
       
-      // Set cooldown for next free spin
       setCanSpinFree(false);
       const nextSpin = new Date();
       nextSpin.setHours(nextSpin.getHours() + 24);
@@ -109,12 +115,11 @@ function App() {
       
     } catch (err) {
       console.error("Spin error:", err);
-      // Demo spin
       demoSpin();
     }
-  }, [isSpinning]);
+  }, [isSpinning, canSpinFree]);
 
-  // Demo spin (without server)
+  // Demo spin
   const demoSpin = () => {
     const prizes = wheelConfig.prizes;
     const totalChance = prizes.reduce((sum, p) => sum + p.chance, 0);
@@ -131,7 +136,7 @@ function App() {
 
     const prize = prizes[slotIndex];
     const isBoost = prize.type === "boost";
-    let winAmount = isBoost ? 0 : Math.floor(25 * prize.multiplier);
+    let winAmount = isBoost ? 0 : Math.floor(50 * prize.multiplier);
 
     setTargetSlot(slotIndex);
     setShouldSpin(true);
@@ -143,14 +148,13 @@ function App() {
       isBoost,
     });
     
-    // Demo cooldown
     setCanSpinFree(false);
     const nextSpin = new Date();
     nextSpin.setHours(nextSpin.getHours() + 24);
     setNextFreeSpinTime(nextSpin);
   };
 
-  // Spin animation complete
+  // Spin complete
   const handleSpinEnd = useCallback((slotIndex, prize) => {
     setShouldSpin(false);
     setIsSpinning(false);
@@ -166,11 +170,11 @@ function App() {
     }
   }, [winResult]);
 
-  // Claim daily reward
+  // Claim daily
   const handleClaimDaily = () => {
     if (dailyClaimed) return;
     
-    const reward = 50; // Credits reward
+    const reward = 50;
     setUser(prev => ({
       ...prev,
       credits: (prev?.credits || 0) + reward,
@@ -178,7 +182,6 @@ function App() {
     setDailyClaimed(true);
     setDailyStreak(prev => prev + 1);
     
-    // Haptic feedback
     if (window.Telegram?.WebApp?.HapticFeedback) {
       window.Telegram.WebApp.HapticFeedback.notificationOccurred("success");
     }
@@ -187,53 +190,71 @@ function App() {
   // Loading screen
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-sg-bg flex flex-col items-center justify-center">
-        <div className="w-12 h-12 border-3 border-sg-border border-t-sg-accent rounded-full animate-spin" />
-        <p className="mt-4 text-sg-text-secondary text-sm">Loading SpinGift...</p>
+      <div className="fixed inset-0 bg-dark flex flex-col items-center justify-center">
+        <div className="w-14 h-14 rounded-full border-4 border-dark-50 border-t-accent animate-spin" />
+        <p className="mt-4 text-white/50 font-semibold">Loading SpinGift...</p>
       </div>
     );
   }
 
+  // Render active page
+  const renderPage = () => {
+    switch (activeTab) {
+      case "cases":
+        return <CasesPage user={user} setUser={setUser} />;
+      case "games":
+        return <GamesPage user={user} />;
+      case "inventory":
+        return <InventoryPage user={user} />;
+      case "profile":
+        return <ProfilePage user={user} />;
+      default:
+        return (
+          <>
+            {/* Wheel Section */}
+            <div className="wheel-section">
+              <Wheel
+                onSpinStart={() => setIsSpinning(true)}
+                onSpinEnd={handleSpinEnd}
+                targetSlot={targetSlot}
+                shouldSpin={shouldSpin}
+              />
+            </div>
+            
+            {/* Content */}
+            <div className="flex-1 flex flex-col px-4 pt-4 pb-28 space-y-4">
+              <DailyRewards
+                streak={dailyStreak}
+                claimed={dailyClaimed}
+                onClaim={handleClaimDaily}
+              />
+              
+              <SpinButton
+                onSpin={handleSpin}
+                isSpinning={isSpinning}
+                canSpinFree={canSpinFree}
+                nextFreeSpinTime={nextFreeSpinTime}
+              />
+            </div>
+          </>
+        );
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-sg-bg flex flex-col">
-      {/* Top fade overlay for wheel visibility */}
+    <div className="min-h-screen min-h-[100dvh] bg-dark flex flex-col">
+      {/* Top fade */}
       <div className="top-fade" />
       
       {/* Top Bar */}
       <TopBar user={user} />
       
       {/* Main Content */}
-      <main className="flex-1 flex flex-col relative">
-        {/* Wheel Section */}
-        <div className="relative h-[220px]">
-          <Wheel
-            onSpinStart={() => setIsSpinning(true)}
-            onSpinEnd={handleSpinEnd}
-            targetSlot={targetSlot}
-            shouldSpin={shouldSpin}
-          />
-        </div>
-        
-        {/* Content below wheel */}
-        <div className="flex-1 flex flex-col px-4 pb-24 space-y-4">
-          {/* Daily Rewards Widget */}
-          <DailyRewards
-            streak={dailyStreak}
-            claimed={dailyClaimed}
-            onClaim={handleClaimDaily}
-          />
-          
-          {/* Spin Button */}
-          <SpinButton
-            onSpin={handleSpin}
-            isSpinning={isSpinning}
-            canSpinFree={canSpinFree}
-            nextFreeSpinTime={nextFreeSpinTime}
-          />
-        </div>
+      <main className="flex-1 flex flex-col pt-16">
+        {renderPage()}
       </main>
       
-      {/* Bottom Navigation */}
+      {/* Bottom Nav */}
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
       
       {/* Win Modal */}

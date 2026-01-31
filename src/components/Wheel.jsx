@@ -52,16 +52,13 @@ export const Wheel = ({ onSpinStart, onSpinEnd, targetSlot, shouldSpin }) => {
         antiRepeat: false,
       },
       onGenerate: (result) => {
-        console.log('🎲 Generated result:', {
-          slot: result.targetSlot,
-          prize: `${result.prize?.image || ''} ${result.prize?.value || 'unknown'}`,
-        });
+        console.log('🎲 Generated:', result.targetSlot, result.prize?.value);
       },
       onUpdate: (newRotation) => {
         setRotation(newRotation);
       },
       onComplete: (finalRotation, winningIndex, prize) => {
-        console.log('🏆 Winning prize:', `${prize?.value || 'Unknown'}`);
+        console.log('🏆 Winner:', prize?.value);
         setRotation(finalRotation);
         if (onSpinEnd) onSpinEnd(winningIndex, prize);
       }
@@ -71,29 +68,21 @@ export const Wheel = ({ onSpinStart, onSpinEnd, targetSlot, shouldSpin }) => {
   };
 
   return (
-    <div className="relative w-full h-full">
-      {/* Wheel container */}
-      <div className="roulette-container">
-        <svg
-          ref={svgRef}
-          viewBox="0 0 800 800"
-          className="w-full h-full"
-          style={{ 
-            transform: `rotate(${rotation}deg)`,
-            transformOrigin: 'center',
-            transition: 'none',
-          }}
-        >
-          <defs>
-            <filter id="slot-glow" x="-200%" y="-200%" width="400%" height="400%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="25" />
-            </filter>
-          </defs>
-          <circle cx="400" cy="400" r="400" fill="none" stroke="none" />
-        </svg>
-      </div>
-
-      {/* Pointer */}
+    <div className="wheel-container">
+      <svg
+        ref={svgRef}
+        viewBox="0 0 800 800"
+        className="wheel-svg"
+        style={{ transform: `rotate(${rotation}deg)` }}
+      >
+        <defs>
+          <filter id="slot-glow" x="-200%" y="-200%" width="400%" height="400%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="25" />
+          </filter>
+        </defs>
+      </svg>
+      
+      {/* Pointer at bottom */}
       <div className="wheel-pointer" />
     </div>
   );

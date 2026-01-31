@@ -2,17 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles */
+/* ============================================
+   SPINGIFT - Premium Telegram Mini App
+   ============================================ */
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html {
+  font-size: 16px;
+}
+
+body {
   margin: 0;
   padding: 0;
-  background-color: #0d0d0f;
+  background: #0a0a0b;
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: #ffffff;
   overflow-x: hidden;
@@ -22,11 +30,14 @@ html, body {
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* Scrollbar styling */
+/* ============================================
+   SCROLLBAR
+   ============================================ */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -37,87 +48,147 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272A;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3F3F46;
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Glass effect utility */
-.glass {
-  background: rgba(21, 21, 24, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* ============================================
+   GLASS MORPHISM
+   ============================================ */
+@layer utilities {
+  .glass {
+    background: rgba(20, 20, 22, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .glass-light {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-accent {
+    background: rgba(42, 171, 238, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 }
 
-.glass-light {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* ============================================
+   GRADIENTS
+   ============================================ */
+@layer utilities {
+  .gradient-accent {
+    background: linear-gradient(135deg, #2AABEE 0%, #1E96D1 100%);
+  }
+
+  .gradient-purple {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  }
+
+  .gradient-gold {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  }
+
+  .gradient-success {
+    background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  }
+
+  .gradient-dark {
+    background: linear-gradient(180deg, #0a0a0b 0%, #151517 100%);
+  }
 }
 
-/* Glow effects */
-.glow-blue {
-  box-shadow: 0 0 20px rgba(42, 171, 238, 0.3);
+/* ============================================
+   TEXT GRADIENTS
+   ============================================ */
+@layer utilities {
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #2AABEE 0%, #5BC4F5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-purple {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
-.glow-purple {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+/* ============================================
+   GLOW EFFECTS
+   ============================================ */
+@layer utilities {
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(42, 171, 238, 0.4);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+  }
 }
 
-.glow-gold {
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
-}
-
-.glow-green {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
-}
-
-/* Text gradient */
-.text-gradient-blue {
-  background: linear-gradient(135deg, #2AABEE 0%, #5BC4F5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.text-gradient-purple {
-  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.text-gradient-gold {
-  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Wheel styles */
-.wheel-wrapper {
+/* ============================================
+   WHEEL STYLES
+   ============================================ */
+.wheel-section {
   position: relative;
-  width: 100%;
-  padding-top: 0;
+  height: 200px;
+  overflow: visible;
 }
 
-.roulette-container {
+.wheel-container {
   position: absolute;
-  width: 900px;
-  height: 900px;
-  top: -720px;
+  width: 800px;
+  height: 800px;
+  top: -620px;
   left: 50%;
   transform: translateX(-50%);
   pointer-events: none;
 }
 
-.roulette {
-  overflow: visible;
-  transition: transform 0.1s linear;
+.wheel-svg {
+  width: 100%;
+  height: 100%;
   transform-origin: center;
+  transition: none;
+}
+
+.wheel-pointer {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 32px solid #2AABEE;
+  filter: drop-shadow(0 -4px 12px rgba(42, 171, 238, 0.6));
+  z-index: 10;
 }
 
 .slot-text {
@@ -127,93 +198,135 @@ html, body {
   text-anchor: middle;
   pointer-events: none;
   user-select: none;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
-  transform-box: fill-box;
-  transform-origin: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .slot-image {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
-  transform-box: fill-box;
-  transform-origin: center;
   pointer-events: none;
   user-select: none;
 }
 
-/* Pointer */
-.wheel-pointer {
-  position: absolute;
-  top: 180px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 40px;
-  z-index: 10;
-}
-
-.wheel-pointer::before {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 35px solid #2AABEE;
-  filter: drop-shadow(0 4px 12px rgba(42, 171, 238, 0.5));
-}
-
-/* Top fade overlay */
+/* ============================================
+   TOP FADE OVERLAY
+   ============================================ */
 .top-fade {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 120px;
+  height: 100px;
   background: linear-gradient(to bottom, 
-    rgba(13, 13, 15, 1) 0%,
-    rgba(13, 13, 15, 0.9) 40%,
-    rgba(13, 13, 15, 0) 100%
+    rgba(10, 10, 11, 1) 0%,
+    rgba(10, 10, 11, 0.95) 30%,
+    rgba(10, 10, 11, 0.7) 60%,
+    rgba(10, 10, 11, 0) 100%
   );
   z-index: 20;
   pointer-events: none;
 }
 
-/* Animation classes */
+/* ============================================
+   SAFE AREAS
+   ============================================ */
+.safe-top {
+  padding-top: max(12px, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .shimmer {
   background: linear-gradient(
     90deg,
     rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0.08) 50%,
     rgba(255,255,255,0) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+  animation: shimmer 2s linear infinite;
 }
 
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1.5); opacity: 0; }
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+.btn-primary {
+  @apply px-6 py-3 rounded-2xl font-bold text-white;
+  @apply gradient-accent;
+  @apply shadow-lg shadow-accent/30;
+  @apply hover:shadow-accent/50 hover:scale-[1.02];
+  @apply active:scale-[0.98];
+  @apply transition-all duration-200;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
 }
 
-.pulse-ring::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 2px solid currentColor;
-  animation: pulse-ring 1.5s ease-out infinite;
+.btn-secondary {
+  @apply px-6 py-3 rounded-2xl font-bold text-white;
+  @apply bg-white/10;
+  @apply hover:bg-white/15;
+  @apply active:scale-[0.98];
+  @apply transition-all duration-200;
 }
 
-/* Safe area padding for mobile */
-.safe-bottom {
-  padding-bottom: max(20px, env(safe-area-inset-bottom));
+.btn-success {
+  @apply px-6 py-3 rounded-2xl font-bold text-white;
+  @apply gradient-success;
+  @apply shadow-lg shadow-success/30;
+  @apply hover:shadow-success/50 hover:scale-[1.02];
+  @apply active:scale-[0.98];
+  @apply transition-all duration-200;
 }
 
-.safe-top {
-  padding-top: max(10px, env(safe-area-inset-top));
+/* ============================================
+   CARD STYLES  
+   ============================================ */
+.card {
+  @apply bg-dark-50 rounded-3xl border border-white/5;
+  @apply p-4;
+}
+
+.card-accent {
+  @apply bg-dark-50 rounded-3xl;
+  @apply border border-accent/20;
+  @apply p-4;
+}
+
+.card-locked {
+  @apply bg-dark-100 rounded-3xl border border-white/5;
+  @apply p-4 opacity-60;
 }

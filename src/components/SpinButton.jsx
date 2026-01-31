@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 export const SpinButton = ({ onSpin, isSpinning, canSpinFree, nextFreeSpinTime }) => {
   const [timeLeft, setTimeLeft] = useState("");
 
-  // Timer for next free spin
   useEffect(() => {
     if (canSpinFree || !nextFreeSpinTime) {
       setTimeLeft("");
@@ -41,10 +40,10 @@ export const SpinButton = ({ onSpin, isSpinning, canSpinFree, nextFreeSpinTime }
       className={`
         relative w-full py-4 px-6 rounded-2xl font-bold text-lg
         flex items-center justify-center gap-3
-        transition-all duration-200 ease-out
+        transition-all duration-200
         ${isDisabled 
-          ? "bg-sg-bg-tertiary text-sg-text-secondary cursor-not-allowed" 
-          : "bg-gradient-to-r from-sg-accent to-sg-accent-dark text-white shadow-lg shadow-sg-accent/30 hover:shadow-sg-accent/50 hover:scale-[1.02] active:scale-[0.98]"
+          ? "bg-dark-50 text-white/40 cursor-not-allowed" 
+          : "bg-gradient-to-r from-accent to-accent-dark text-white shadow-lg shadow-accent/30 hover:shadow-accent/50 hover:scale-[1.02] active:scale-[0.98]"
         }
       `}
     >
@@ -57,13 +56,13 @@ export const SpinButton = ({ onSpin, isSpinning, canSpinFree, nextFreeSpinTime }
         <>
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-            <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="12" cy="12" r="3" fill="currentColor" />
           </svg>
           <span>Spin for Free</span>
         </>
       ) : (
         <>
-          <svg className="w-6 h-6 opacity-50" viewBox="0 0 24 24" fill="none">
+          <svg className="w-5 h-5 opacity-50" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
             <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
